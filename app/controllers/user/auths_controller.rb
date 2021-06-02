@@ -16,10 +16,7 @@ class User::AuthsController < ApplicationController
         token: token,
       }
     else
-      render json:{
-        status: "failed",
-        msg: "failed to auth"
-      }
+      render_unauthorized
     end
   end
 

@@ -1,0 +1,1 @@
+Time::DATE_FORMATS[:default] = '%Y年%m/%d %H:%M'
