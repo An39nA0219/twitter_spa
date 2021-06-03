@@ -5,6 +5,8 @@ class User::Me::FollowersController < ApplicationController
     user = current_user
     followers = user.followers.select("users.id", "users.name")
     render json: {
+      status: "success",
+      msg: "followers",
       followers: followers
     }
   end

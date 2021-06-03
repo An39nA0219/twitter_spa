@@ -10,6 +10,8 @@ class User::Me::TweetsController < ApplicationController
     end
 
     render json: {
+      status: "success",
+      msg: "my tweets",
       tweets: tweets
     }
   end

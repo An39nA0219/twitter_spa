@@ -7,6 +7,8 @@ class User::TweetsController < ApplicationController
     ids = user.followings.pluck(:id).push(user.id)
     tweets = Tweet.joins(:user).where(users: {id: ids})
     render json: {
+      status: "success",
+      msg: "timeline",
       tweets: tweets
     }
   end
@@ -17,6 +19,8 @@ class User::TweetsController < ApplicationController
     t_user = tweet.user
     if tweet
       render json: {
+        status: "success",
+        msg: "show a tweet",
         tweet: {
           id: tweet.id,
           content: tweet.content,

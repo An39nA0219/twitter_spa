@@ -14,6 +14,7 @@ class User::Me::FavoritesController < ApplicationController
     end
     render json: {
       status: "success",
+      msg: "my favorites",
       favorites: favorites
     }
   end
@@ -22,6 +23,8 @@ class User::Me::FavoritesController < ApplicationController
     user = current_user
     if FavoriteLog.create!(user_id: user.id, tweet_id: params[:tweet_id])
       render json: {
+        status: "success",
+        msg: "add to favorite",
         status: "success"
       }
     else
@@ -36,6 +39,8 @@ class User::Me::FavoritesController < ApplicationController
     if log.present?
       if log.destroy
         render json: {
+          status: "success",
+          msg: "delete favorite",
           status: "success"
         }
       else
