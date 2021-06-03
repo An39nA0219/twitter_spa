@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   scope module: :user do
     post 'login', to: "auths#create"
-    root to: "timelines#index"
+    root to: "tweets#index"
+    get 'tweets/:id', to: "tweets#show"
 
     scope module: :me do
       get 'mytweets', to: "tweets#index"
