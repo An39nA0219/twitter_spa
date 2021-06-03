@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       post 'mytweets', to: "tweets#create"
       patch 'mytweets/:id', to: "tweets#update"
       delete 'mytweets/:id', to: "tweets#destroy"
+
+      get 'followings', to: "followings#index"
     end
   end
 end
