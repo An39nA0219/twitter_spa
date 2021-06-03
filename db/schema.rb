@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_03_150716) do
+ActiveRecord::Schema.define(version: 2021_06_03_161918) do
+
+  create_table "favorite_logs", id: :string, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "user_id", null: false
+    t.string "tweet_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tweet_id"], name: "index_favorite_logs_on_tweet_id"
+    t.index ["user_id", "tweet_id"], name: "index_favorite_logs_on_user_id_and_tweet_id", unique: true
+    t.index ["user_id"], name: "index_favorite_logs_on_user_id"
+  end
 
   create_table "relationships", id: :string, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "user_id", null: false
@@ -39,6 +49,8 @@ ActiveRecord::Schema.define(version: 2021_06_03_150716) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "favorite_logs", "tweets"
+  add_foreign_key "favorite_logs", "users"
   add_foreign_key "relationships", "users"
   add_foreign_key "relationships", "users", column: "follow_id"
   add_foreign_key "tweets", "users"
