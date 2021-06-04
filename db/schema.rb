@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_03_161918) do
+ActiveRecord::Schema.define(version: 2021_06_04_135212) do
 
   create_table "favorite_logs", id: :string, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "user_id", null: false
@@ -30,6 +30,15 @@ ActiveRecord::Schema.define(version: 2021_06_03_161918) do
     t.index ["follow_id"], name: "index_relationships_on_follow_id"
     t.index ["user_id", "follow_id"], name: "index_relationships_on_user_id_and_follow_id", unique: true
     t.index ["user_id"], name: "index_relationships_on_user_id"
+  end
+
+  create_table "replies", id: :string, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "tweet_id", null: false
+    t.string "reply_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["reply_id"], name: "index_replies_on_reply_id"
+    t.index ["tweet_id"], name: "index_replies_on_tweet_id"
   end
 
   create_table "tweets", id: :string, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -53,5 +62,7 @@ ActiveRecord::Schema.define(version: 2021_06_03_161918) do
   add_foreign_key "favorite_logs", "users"
   add_foreign_key "relationships", "users"
   add_foreign_key "relationships", "users", column: "follow_id"
+  add_foreign_key "replies", "tweets"
+  add_foreign_key "replies", "tweets", column: "reply_id"
   add_foreign_key "tweets", "users"
 end

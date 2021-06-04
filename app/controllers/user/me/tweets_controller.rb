@@ -21,13 +21,29 @@ class User::Me::TweetsController < ApplicationController
     tweet = Tweet.new(tweet_params)
     if tweet.content.present?
       tweet.user_id = user.id
-      if tweet.save!
-        render json: {
-          status: "success",
-          msg: "save tweet"
-        }
+      if is_correct_id?(reply_params[:tweet_id])
+        if tweet.save!
+          original_tweet = Tweet.find_by(id: reply_params[:tweet_id])
+          if original_tweet
+            if Reply.create!(tweet_id: original_tweet.id, reply_id: tweet.id)
+              render json: {
+                status: "success",
+                msg: "save reply tweet"
+              }
+            else
+              render_internal_server_error("failed to reply")
+            end
+          else
+            render json: {
+              status: "success",
+              msg: "save tweet"
+            }
+          end
+        else
+          render_internal_server_error("failed to save")
+        end
       else
-        render_internal_server_error("failed to save")
+        render_bad_request("original tweet is not found")
       end
     else
       render_bad_request("no content")
@@ -79,5 +95,15 @@ class User::Me::TweetsController < ApplicationController
 
   def tweet_params
     params.permit(:content)
+  end
+
+  def reply_params
+    params.permit(:tweet_id)
+  end
+
+  def is_correct_id?(params)
+    return true if params.blank?
+    original_tweet = Tweet.find_by(id: params)
+    original_tweet.present?
   end
 end
