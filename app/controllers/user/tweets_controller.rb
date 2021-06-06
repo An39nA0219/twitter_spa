@@ -17,6 +17,9 @@ class User::TweetsController < ApplicationController
     user = current_user
     tweet = Tweet.find_by(id: params[:id])
     t_user = tweet.user
+    
+    if tweet.replies
+
     if tweet
       render json: {
         status: "success",
@@ -29,6 +32,9 @@ class User::TweetsController < ApplicationController
         t_user: {
           id: t_user.id,
           name: t_user.name,
+        },
+        reply: {
+
         }
       }
     else
