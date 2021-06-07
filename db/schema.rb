@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_04_135212) do
+ActiveRecord::Schema.define(version: 2021_06_07_150029) do
 
   create_table "favorite_logs", id: :string, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "user_id", null: false
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 2021_06_04_135212) do
     t.text "profile"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "secret_question"
+    t.string "secret_answer"
   end
 
   add_foreign_key "favorite_logs", "tweets"

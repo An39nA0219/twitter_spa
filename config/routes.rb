@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  namespace :user do
+    namespace :me do
+      get 'emails/auth'
+      get 'emails/update'
+    end
+  end
   scope module: :user do
 
     post 'login', to: "auths#create"
@@ -22,6 +28,9 @@ Rails.application.routes.draw do
 
       get 'profiles', to: "profiles#index"
       patch 'profiles', to: "profiles#update"
+
+      post 'emails/auth', to: "emails#auth"
+      patch 'emails', to: "emails#update"
     end
   end
 end

@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  require 'openssl'
+  require 'base64'
 
   def current_user
     token = request.headers['Authorization']
@@ -26,6 +28,59 @@ class ApplicationController < ActionController::API
     unless !!current_user
       render_unauthorized
     end
+  end
+
+  # AES暗号化(メール)
+  def aes_encrypt_for_email(text)
+      
+    # salt
+    salt = Rails.application.credentials[:aes_salt_for_email]
+
+    # password
+    password = Rails.application.credentials[:aes_pw_for_email]
+
+    # 暗号器を生成
+    enc = OpenSSL::Cipher::AES.new(256, :CBC)
+    enc.encrypt
+
+    # パスワードとsaltをもとに鍵とivを生成し、設定
+    key_iv = OpenSSL::PKCS5.pbkdf2_hmac(password, salt, 2000, enc.key_len + enc.iv_len, "sha256")
+    enc.key = key_iv[0, enc.key_len]
+    enc.iv = key_iv[enc.key_len, enc.iv_len]
+
+    # 文字列を暗号化
+    encrypted_text = enc.update(text) + enc.final
+
+    # Base64でエンコード
+    encrypted_text = Base64.encode64(encrypted_text).chomp
+    salt = Base64.encode64(salt).chomp
+
+    return encrypted_text
+  end
+
+  # AES復号化(メール)
+  def aes_decrypt_for_email(text) 
+
+    # Base64でデコード
+    encrypted_text = Base64.decode64(text)
+
+    # salt
+    salt = Rails.application.credentials[:aes_salt_for_email]
+
+    # password
+    password = Rails.application.credentials[:aes_pw_for_email]
+  
+    # 復号器を生成
+    dec = OpenSSL::Cipher::AES.new(256, :CBC)
+    dec.decrypt
+  
+    # パスワードとsaltをもとに鍵とivを生成し、設定
+    key_iv = OpenSSL::PKCS5.pbkdf2_hmac(password, salt, 2000, dec.key_len + dec.iv_len, "sha256")
+    dec.key = key_iv[0, dec.key_len]
+    dec.iv = key_iv[dec.key_len, dec.iv_len]
+  
+    # 暗号を復号
+    return dec.update(encrypted_text) + dec.final
   end
 
   # HTTPステータスコード
