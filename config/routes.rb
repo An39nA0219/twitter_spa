@@ -19,6 +19,9 @@ Rails.application.routes.draw do
       get "favorites", to: "favorites#index"
       post "tweets/:tweet_id/favorites", to: "favorites#create"
       delete "tweets/:tweet_id/favorites", to: "favorites#destroy"
+
+      get 'profiles', to: "profiles#index"
+      patch 'profiles', to: "profiles#update"
     end
   end
 end
