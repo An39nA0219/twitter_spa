@@ -1,12 +1,7 @@
 Rails.application.routes.draw do
-  namespace :user do
-    namespace :me do
-      get 'emails/auth'
-      get 'emails/update'
-    end
-  end
   scope module: :user do
 
+    post "sign_up", to: "sign_ups#create"
     post 'login', to: "auths#create"
     root to: "tweets#index"
     get "tweets", to: "tweets#index"

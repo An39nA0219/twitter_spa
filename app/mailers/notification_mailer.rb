@@ -6,6 +6,13 @@ class NotificationMailer < ApplicationMailer
   #   en.notification_mailer.change_email.subject
   #
 
+  def sign_up(user)
+    @user = user
+
+    mail to: @user.email,
+    subject: "【Twitter SPA】アカウントが登録されました"
+  end
+
   def change_email(user, url)
     @user = user
     @url = url
